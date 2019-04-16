@@ -50,6 +50,7 @@ class PyFocalsGUI:
         print("Greetings!")
 
 
-root = Tk()
-gui = PyFocalsGUI(root)
-root.mainloop()
+if __name__ == "__main__":
+    root = Tk()
+    gui = PyFocalsGUI(root)
+    root.mainloop()
