@@ -7,6 +7,8 @@ import imutils
 import threading
 import cv2
 
+from detect_blinks import FaceTracker
+
 class PyFocalsGUI:
     def __init__(self, master, vs):
         self.master = master
@@ -17,6 +19,8 @@ class PyFocalsGUI:
         self.thread = None
         self.stopEvent = None
         self.panel = None
+
+        self.tracker = FaceTracker()
 
         self.menuBar = Menu(master)
 
@@ -78,6 +82,8 @@ class PyFocalsGUI:
                 # have a maximum width of 300 pixels
                 self.frame = self.vs.read()
                 self.frame = imutils.resize(self.frame, width=360)
+
+                self.frame = self.tracker.track(self.frame)
 
                 # OpenCV represents images in BGR order; however PIL
                 # represents images in RGB order, so we need to swap
