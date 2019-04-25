@@ -132,6 +132,9 @@ class FaceTracker(object):
 
 			# draw the total number of blinks on the frame along with
 			# the computed eye aspect ratio for the frame
+			#====================
+			#This is where keybinding will be integrated to binding.py
+			#====================
 			cv2.putText(frame, "LeftWinks: {}".format(self.lTOTAL), (10, 30),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 			cv2.putText(frame, "RightWinks: {}".format(self.rTOTAL), (10, 60),
