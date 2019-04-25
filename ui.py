@@ -71,10 +71,6 @@ class PyFocalsGUI:
         master.wm_protocol("WM_DELETE_WINDOW", self.onClose)
 
     def videoLoop(self):
-        # DISCLAIMER:
-        # I'm not a GUI developer, nor do I even pretend to be. This
-        # try/except statement is a pretty ugly hack to get around
-        # a RunTime error that Tkinter throws due to threading
         try:
             # keep looping over frames until we are instructed to stop
             while not self.stopEvent.is_set():
