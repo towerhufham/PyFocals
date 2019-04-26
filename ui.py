@@ -37,7 +37,7 @@ class PyFocalsGUI:
         self.settingsMenu.add_checkbutton(label="Verticies", command=None)
         self.settingsMenu.add_checkbutton(label="Show Camera", command=None)
         self.settingsMenu.add_separator()
-        self.settingsMenu.add_command(label="Clear bindings", command=None)
+        self.settingsMenu.add_command(label="Clear bindings", command=self.clearBindings)
         self.menuBar.add_cascade(label="Settings", menu=self.settingsMenu)
 
         self.optionsFrame = Frame(master, width=240, height=360, bd=2, relief=SUNKEN)
@@ -60,7 +60,7 @@ class PyFocalsGUI:
         self.rebindButton = Button(self.optionsFrame, text="Bind", command=self.startBinding)
         self.rebindButton.pack()
 
-        self.unbindButton = Button(self.optionsFrame, text="Unbind", command=self.clearBinding)
+        self.unbindButton = Button(self.optionsFrame, text="Unbind", command=self.unbind)
         self.unbindButton.pack()
 
         self.trackButton = Button(self.optionsFrame, text="Start Tracking", command=None)
@@ -99,7 +99,15 @@ class PyFocalsGUI:
         motion = binding.motions[index]
         binding.bind(motion, character)
 
-    def clearBinding(self):
+    def clearBindings(self):
+        #this is slightly inconsistent with the way the others work
+        #BUT GOOD ENOUGH SOFTWARE IS GOOD ENOUGH RIGHT
+        for i in range(8):
+            motion = binding.motions[i]
+            binding.unbind(motion)
+        self.updateBindingTable()
+
+    def unbind(self):
         items = self.bindingListBox.curselection()
         for index in items:
             motion = binding.motions[index]
