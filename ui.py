@@ -8,6 +8,7 @@ import threading
 import cv2
 
 from detect_blinks import FaceTracker
+import binding
 
 class PyFocalsGUI:
     def __init__(self, master, vs):
@@ -20,6 +21,7 @@ class PyFocalsGUI:
         self.stopEvent = None
         self.panel = None
 
+        self.lastKey = None
         self.tracker = FaceTracker()
 
         self.menuBar = Menu(master)
@@ -45,17 +47,17 @@ class PyFocalsGUI:
         self.videoFrame.pack(side=LEFT)
 
         self.bindingListBox = Listbox(self.optionsFrame)
-        self.bindingListBox.insert(1, "Left Wink")
-        self.bindingListBox.insert(2, "Right Wink")
-        self.bindingListBox.insert(3, "Eyebrows Up")
-        self.bindingListBox.insert(4, "Open Mouth")
-        self.bindingListBox.insert(5, "Head Left")
-        self.bindingListBox.insert(6, "Head Right")
-        self.bindingListBox.insert(7, "Head Up")
-        self.bindingListBox.insert(8, "Head Down")
+        self.bindingListBox.insert(0, "Left Wink")
+        self.bindingListBox.insert(1, "Right Wink")
+        self.bindingListBox.insert(2, "Eyebrows Up")
+        self.bindingListBox.insert(3, "Open Mouth")
+        self.bindingListBox.insert(4, "Head Left")
+        self.bindingListBox.insert(5, "Head Right")
+        self.bindingListBox.insert(6, "Head Up")
+        self.bindingListBox.insert(7, "Head Down")
         self.bindingListBox.pack()
 
-        self.rebindButton = Button(self.optionsFrame, text="Rebind", command=None)
+        self.rebindButton = Button(self.optionsFrame, text="Rebind", command=self.startBinding)
         self.rebindButton.pack()
 
         self.trackButton = Button(self.optionsFrame, text="Start Tracking", command=None)
@@ -63,12 +65,38 @@ class PyFocalsGUI:
 
         master.config(menu=self.menuBar)
 
+        self.updateBindingTable()
+
         # start a thread that constantly pools the video sensor for
         # the most recently read frame
         self.stopEvent = threading.Event()
         self.thread = threading.Thread(target=self.videoLoop, args=())
         self.thread.start()
         master.wm_protocol("WM_DELETE_WINDOW", self.onClose)
+
+    def key(self, event):
+        self.lastKey = event.char
+
+    def startBinding(self):
+        #this might need a better solution
+        #if we find a last key pressed
+        if self.lastKey:
+            #get selected items
+            items = self.bindingListBox.curselection()
+            for index in items:
+                self.bind(index, self.lastKey)
+        self.updateBindingTable()
+
+    def bind(self, index, character):
+        motion = binding.motions[index]
+        binding.bind(motion, character)
+
+    def updateBindingTable(self):
+        for i in range(8):
+            motion = binding.motions[i]
+            name = binding.getBindString(motion)
+            self.bindingListBox.delete(i)
+            self.bindingListBox.insert(i, name)
 
     def videoLoop(self):
         try:
@@ -120,7 +148,9 @@ def startGUI():
         vs = VideoStream(usePiCamera=False).start()
     except:
         vs = VideoStream(usePiCamera=True).start()
+
     gui = PyFocalsGUI(root, vs)
+    root.bind("<Key>", gui.key)
     sleep(1.0)
 
     root.mainloop()

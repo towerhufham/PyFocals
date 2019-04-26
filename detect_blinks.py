@@ -144,9 +144,6 @@ class FaceTracker(object):
 				cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 			cv2.putText(frame, "RightEAR: {:.2f}".format(rightEAR), (270, 60),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-
-			print("LeftWinks: {};".format(self.lTOTAL),
-			      "RightWinks: {}".format(self.rTOTAL))
 	
 		# show the frame
 		# cv2.imshow("Frame", frame)
