@@ -57,17 +57,11 @@ class PyFocalsGUI:
         self.bindingListBox.insert(7, "Head Down")
         self.bindingListBox.pack()
 
-        self.rebindButton = Button(self.optionsFrame, text="Bind", command=self.startBinding)
-        self.rebindButton.pack()
-
         self.unbindButton = Button(self.optionsFrame, text="Unbind", command=self.unbind)
         self.unbindButton.pack()
 
         self.trackButton = Button(self.optionsFrame, text="Start Tracking", command=None)
         self.trackButton.pack()
-
-        self.bindingLabel = Label(self.optionsFrame, text="No key to bind")
-        self.bindingLabel.pack()
 
         master.config(menu=self.menuBar)
 
@@ -80,10 +74,10 @@ class PyFocalsGUI:
         self.thread.start()
         master.wm_protocol("WM_DELETE_WINDOW", self.onClose)
 
-    def key(self, event):
+    def keyInputListener(self, event):
         self.lastKey = event.char
         s = "Key to bind: " + self.lastKey
-        self.bindingLabel.config(text=s)
+        self.startBinding()
 
     def startBinding(self):
         #this might need a better solution
@@ -173,7 +167,7 @@ def startGUI():
         vs = VideoStream(usePiCamera=True).start()
 
     gui = PyFocalsGUI(root, vs)
-    root.bind("<Key>", gui.key)
+    root.bind("<Key>", gui.keyInputListener)
     sleep(1.0)
 
     root.mainloop()
