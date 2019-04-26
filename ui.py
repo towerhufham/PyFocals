@@ -63,6 +63,9 @@ class PyFocalsGUI:
         self.trackButton = Button(self.optionsFrame, text="Start Tracking", command=None)
         self.trackButton.pack()
 
+        self.bindingLabel = Label(self.optionsFrame, text="No key to bind")
+        self.bindingLabel.pack()
+
         master.config(menu=self.menuBar)
 
         self.updateBindingTable()
@@ -76,6 +79,8 @@ class PyFocalsGUI:
 
     def key(self, event):
         self.lastKey = event.char
+        s = "Key to bind: " + self.lastKey
+        self.bindingLabel.config(text=s)
 
     def startBinding(self):
         #this might need a better solution
