@@ -57,8 +57,11 @@ class PyFocalsGUI:
         self.bindingListBox.insert(7, "Head Down")
         self.bindingListBox.pack()
 
-        self.rebindButton = Button(self.optionsFrame, text="Rebind", command=self.startBinding)
+        self.rebindButton = Button(self.optionsFrame, text="Bind", command=self.startBinding)
         self.rebindButton.pack()
+
+        self.unbindButton = Button(self.optionsFrame, text="Unbind", command=self.clearBinding)
+        self.unbindButton.pack()
 
         self.trackButton = Button(self.optionsFrame, text="Start Tracking", command=None)
         self.trackButton.pack()
@@ -95,6 +98,13 @@ class PyFocalsGUI:
     def bind(self, index, character):
         motion = binding.motions[index]
         binding.bind(motion, character)
+
+    def clearBinding(self):
+        items = self.bindingListBox.curselection()
+        for index in items:
+            motion = binding.motions[index]
+            binding.unbind(motion)
+        self.updateBindingTable()
 
     def updateBindingTable(self):
         for i in range(8):
