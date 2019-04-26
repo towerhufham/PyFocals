@@ -14,6 +14,8 @@ import time
 import dlib
 import cv2
 
+import binding
+
 def eye_aspect_ratio(eye):
 	# compute the euclidean distances between the two sets of
 	# vertical eye landmarks (x, y)-coordinates
@@ -119,6 +121,7 @@ class FaceTracker(object):
 				# then increment the total number of blinks
 				if self.lCOUNTER >= self.EYE_AR_CONSEC_FRAMES:
 					self.lTOTAL += 1
+					binding.pressBoundKey("Left Wink")
 				# reset the eye frame counter
 				self.lCOUNTER = 0
 
@@ -127,14 +130,12 @@ class FaceTracker(object):
 			else:
 				if self.rCOUNTER >= self.EYE_AR_CONSEC_FRAMES:
 					self.rTOTAL += 1
+					binding.pressBoundKey("Right Wink")
 				self.rCOUNTER = 0
 
 
 			# draw the total number of blinks on the frame along with
 			# the computed eye aspect ratio for the frame
-			#====================
-			#This is where keybinding will be integrated to binding.py
-			#====================
 			cv2.putText(frame, "LeftWinks: {}".format(self.lTOTAL), (10, 30),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 			cv2.putText(frame, "RightWinks: {}".format(self.rTOTAL), (10, 60),

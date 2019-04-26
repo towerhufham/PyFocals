@@ -1,7 +1,7 @@
 import autopy
 
-bindings = {"Left Wink": None,
-            "Right Wink": None,
+bindings = {"Left Wink": "x",
+            "Right Wink": "o",
             "Eyebrows Up": None,
             "Open Mouth": None,
             "Head Left": None,
@@ -12,7 +12,8 @@ bindings = {"Left Wink": None,
 
 def pressBoundKey(motion):
     """Takes in a motion, and sends the bound key signal"""
-    autopy.key.tap(bindings[motion])
+    print("pressing " + bindings[motion])
+    autopy.key.tap(bindings[motion], [])
 
 def bind(motion, character):
     """Binds a character key to a motion in the bindings table"""
