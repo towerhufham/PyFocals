@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import ImageTk
 from PIL import Image
 from imutils.video import VideoStream
+from tkinter import filedialog
 from time import sleep
 import imutils
 import threading
@@ -27,8 +28,8 @@ class PyFocalsGUI:
         self.menuBar = Menu(master)
 
         self.fileMenu = Menu(self.menuBar, tearoff=0)
-        self.fileMenu.add_command(label="Open", command=None)
-        self.fileMenu.add_command(label="Save", command=None)
+        self.fileMenu.add_command(label="Open", command=self.openDialog)
+        self.fileMenu.add_command(label="Save", command=self.saveDialog)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Exit", command=self.onClose)
         self.menuBar.add_cascade(label="File", menu=self.fileMenu)
@@ -92,6 +93,21 @@ class PyFocalsGUI:
     def bind(self, index, character):
         motion = binding.motions[index]
         binding.bind(motion, character)
+
+    def saveDialog(self):
+        f = filedialog.asksaveasfile(mode='w', defaultextension=".json")
+        if f is None:  # asksaveasfile return `None` if dialog closed with "cancel".
+            return
+        else:
+            binding.saveBindings(f)
+
+    def openDialog(self):
+        o = filedialog.askopenfile(mode="r", defaultextension=".json")
+        if o is None:
+            return
+        else:
+            binding.loadBindings(o)
+        self.updateBindingTable()
 
     def clearBindings(self):
         #this is slightly inconsistent with the way the others work

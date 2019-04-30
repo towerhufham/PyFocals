@@ -1,4 +1,4 @@
-import autopy
+import autopy, json
 
 motions = ["Left Wink", "Right Wink", "Eyebrows Up", "Open Mouth", "Head Left", "Head Right", "Head Up", "Head Down"]
 
@@ -11,6 +11,13 @@ bindings = {"Left Wink": None,
             "Head Up": None,
             "Head Down": None
 }
+
+def saveBindings(f):
+    json.dump(bindings, f)
+
+def loadBindings(o):
+    global bindings
+    bindings = json.load(o)
 
 def getBindString(motion):
     """Returns a string of the form "motion: key" for use in the ui"""
