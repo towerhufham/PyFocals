@@ -22,6 +22,9 @@ class PyFocalsGUI:
         self.stopEvent = None
         self.panel = None
 
+        self.hideCamera = True
+        self.showVerticies = False
+
         self.lastKey = None
         self.tracker = FaceTracker()
 
@@ -35,8 +38,8 @@ class PyFocalsGUI:
         self.menuBar.add_cascade(label="File", menu=self.fileMenu)
 
         self.settingsMenu = Menu(self.menuBar, tearoff=0)
-        self.settingsMenu.add_checkbutton(label="Verticies", command=None)
-        self.settingsMenu.add_checkbutton(label="Show Camera", command=None)
+        self.settingsMenu.add_checkbutton(label="Show Verticies", command=self.toggleVerticies)
+        self.settingsMenu.add_checkbutton(label="Hide Camera", command=self.toggleCameraView)
         self.settingsMenu.add_separator()
         self.settingsMenu.add_command(label="Clear bindings", command=self.clearBindings)
         self.menuBar.add_cascade(label="Settings", menu=self.settingsMenu)
@@ -79,6 +82,12 @@ class PyFocalsGUI:
         self.lastKey = event.char
         s = "Key to bind: " + self.lastKey
         self.startBinding()
+
+    def toggleVerticies(self):
+        self.showVerticies = not self.showVerticies
+
+    def toggleCameraView(self):
+        self.hideCamera = not self.hideCamera
 
     def startBinding(self):
         #this might need a better solution
@@ -140,7 +149,7 @@ class PyFocalsGUI:
                 self.frame = self.vs.read()
                 self.frame = imutils.resize(self.frame, width=360)
 
-                self.frame = self.tracker.track(self.frame)
+                self.frame = self.tracker.track(self.frame, self.showVerticies)
 
                 # OpenCV represents images in BGR order; however PIL
                 # represents images in RGB order, so we need to swap

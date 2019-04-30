@@ -69,7 +69,7 @@ class FaceTracker(object):
 
 		# time.sleep(1.0)
 
-	def track(self, frame):
+	def track(self, frame, showVerticies=True):
 		# if this is a file video stream, then we need to check if
 		# there any more frames left in the buffer to process
 
@@ -106,8 +106,9 @@ class FaceTracker(object):
 			# visualize each of the eyes
 			leftEyeHull = cv2.convexHull(leftEye)
 			rightEyeHull = cv2.convexHull(rightEye)
-			cv2.drawContours(frame, [leftEyeHull], -1, (0, 255, 0), 1)
-			cv2.drawContours(frame, [rightEyeHull], -1, (0, 255, 0), 1)
+			if showVerticies:
+				cv2.drawContours(frame, [leftEyeHull], -1, (0, 255, 0), 1)
+				cv2.drawContours(frame, [rightEyeHull], -1, (0, 255, 0), 1)
 
 			# check to see if the eye aspect ratio is below the blink
 			# threshold, and if so, increment the blink frame counter
